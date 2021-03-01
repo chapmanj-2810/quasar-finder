@@ -10,11 +10,11 @@ from imblearn.pipeline import Pipeline
 from sklearn.tree import DecisionTreeClassifier, plot_tree
 
 columns = ['Topt', 'PS1zmag', 'PS1ymag', 'Jmag', 'W1mag', 'W2mag', 'W3mag']
-dwarfs_df = pd.read_csv('dwarf_catalogue.txt', sep=';', usecols=columns, comment='#').apply(pd.to_numeric, errors='coerce')
+dwarfs_df = pd.read_csv('Dwarf_Star_Data\dwarf_catalogue.txt', sep=';', usecols=columns, comment='#').apply(pd.to_numeric, errors='coerce')
 dwarfs_df = dwarfs_df[~dwarfs_df['Topt'].between(0, 10)].drop(columns='Topt').dropna(how='any', axis=0) 
 dwarfs_df['Object'] = 0 #The target column: 0 for dwarfs, 1 for quasars.
 
-quasars_df = pd.read_csv('quasars.txt', sep='\s+', usecols=columns[1:])
+quasars_df = pd.read_csv('Quasar_Data\quasars.txt', sep='\s+', usecols=columns[1:])
 quasars_df['W1mag'] = quasars_df['W1mag'] - 1.7  #   Changing Units
 quasars_df['W2mag'] = quasars_df['W2mag'] - 3.34 #
 quasars_df['Object'] = 1
@@ -35,7 +35,7 @@ X['J-W2'] = X.Jmag-X.W2mag        #
 
 X = X.drop(columns=columns[1:])   #Removing the original data from the features.
 
-new_data = pd.read_csv('new_data_colours.csv', sep=',')
+new_data = pd.read_csv('New_Data\new_data_colours.csv', sep=',')
 coordinates = new_data[['ra', 'dec']]
 X_new = new_data.drop(columns=['ra', 'dec'])
 
@@ -62,7 +62,7 @@ print('No. of Quasars in the Holdout Set: {}'.format(y_test.sum()))
 print(confusion_matrix(y_test, y_pred))
 print(classification_report(y_test, y_pred))
 
-quasar_coords = pd.read_csv('catalogue.txt', sep=',', usecols=['ra', 'dec']).values
+quasar_coords = pd.read_csv('Quasar_Data\catalogue.txt', sep=',', usecols=['ra', 'dec']).values
 
 quasars_found_no = 0
 quasars_found_coords = []
